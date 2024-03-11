@@ -19,6 +19,11 @@ const UserSchema = mongoose.Schema({
     password:{
         type:String,
         required:true,
+    },
+    isEmialAuthemticated:{
+        type:Boolean,
+        required:true,
+        default:false
     }
 })
 module.exports = mongoose.model('user',UserSchema)

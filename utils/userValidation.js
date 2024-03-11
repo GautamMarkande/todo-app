@@ -1,4 +1,6 @@
 const Validater = require('validator');
+const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
 
 const userDataValidation = ({name,email,username,password})=>{
     return new Promise((resolve,reject)=>{
@@ -27,4 +29,34 @@ const userDataValidation = ({name,email,username,password})=>{
        resolve("Registration Successfull")
     })
 }
-module.exports = {userDataValidation}
+const generateToken = (email)=>{
+  const token = jwt.sign(email,process.env.SECRET_KEY);
+  return token;
+}
+const sendVerificationMail=(email,varifiedToken)=>{
+    //transporter
+    const transporter = nodemailer.createTransport({
+      host:"smtp.gmail.com",
+      port:465,
+      secure:true,
+      service:'gmail',
+      auth:{
+         user: 'gautammarkande71@gmail.com',
+         pass: "mnpr ldkr aeba cncy"
+      }
+    })
+    //mai option
+    const mailOption = {
+      from:'gautammarkande71@gmail.com',
+      to:email,
+      subject:`Please verify your Email for Todo App`,
+      html:`click <a href=http://localhost:8000/auth/${varifiedToken}>here</a>`
+
+   }
+    //send mail
+    transporter.sendMail(mailOption,(err,data)=>{
+     if(err) console.log('error in sending verification Mail ', err);
+     else console.log(`verification Mail sent successfully to ${data}`);
+    });
+}
+module.exports = {userDataValidation,generateToken,sendVerificationMail};

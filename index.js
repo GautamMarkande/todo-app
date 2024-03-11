@@ -8,8 +8,9 @@ const bcrypt = require('bcrypt');
 const Validater = require('validator')
 const session = require('express-session')
 const monodbSession = require('connect-mongodb-session')(session)
+const jwt = require('jsonwebtoken')
 //file imports
-const { userDataValidation } = require('./utils/userValidation');
+const { userDataValidation, generateToken, sendVerificationMail } = require('./utils/userValidation');
 const userModel = require('./model/userModel');
 const { Auth } = require('./middlewares/userAuthMiddleware');
 const todoModel = require('./model/todoModel');
@@ -48,7 +49,7 @@ mongoose.connect(process.env.MongoDbUri).then(() => {
 // server Checking
 app.get('/', (req, res) => {
     console.log("Todo app is Running ");
-    return res.send("Todo app is Running")
+    return res.render('landingPage')
 })
 
 
@@ -112,6 +113,9 @@ app.post('/register', async (req, res) => {
     //store data into Db
     try {
         const userDb = await userObj.save();
+        const varifiedToken = generateToken(email)
+         sendVerificationMail(email,varifiedToken)
+        
         return res.redirect("/login")
     }
     catch (Error) {
@@ -121,6 +125,22 @@ app.post('/register', async (req, res) => {
             data: Error
         })
     }
+
+})
+app.get(`/auth/:id`,async(req,res)=>{
+    console.log(req.params.id)
+    const userEmail = jwt.verify(req.params.id,process.env.SECRET_KEY);
+    try {
+        await userModel.findOneAndUpdate({email:userEmail},{isEmialAuthemticated:true})
+        return res.redirect('/login')
+    } catch (error) {
+        return res.send({
+            status:500,
+            message:"Databse Error",
+            error:error
+        })
+    }
+   
 })
 app.post('/login', async (req, res) => {
     const { loginId, password } = req.body;
@@ -141,6 +161,13 @@ app.post('/login', async (req, res) => {
             return res.send({
                 status: 400,
                 message: 'User not found'
+            })
+        }
+        //check emial is authenticated or not
+        if(!userData.isEmialAuthemticated){
+            return res.send({
+                status:400,
+                message: `Your account is not verified yet.`
             })
         }
         //check password matched or not 
