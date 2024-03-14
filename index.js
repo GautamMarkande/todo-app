@@ -68,14 +68,14 @@ app.get('/login', (req, res) => {
 
 //post apis to accept data
 app.post('/register', async (req, res) => {
-    console.log(req.body)
+    // console.log(req.body)
     const { name, email, username, password } = req.body;
-    console.log(name, email, username, password)
+    // console.log(name, email, username, password)
     //Data validation
     const HashedPass = await bcrypt.hash(password, parseInt(process.env.SALT))
     try {
         const response = await userDataValidation({ name, email, username, password })
-        console.log(response)
+        // console.log(response)
 
     } catch (Error) {
         return res.send({
@@ -128,7 +128,7 @@ app.post('/register', async (req, res) => {
 
 })
 app.get(`/auth/:id`,async(req,res)=>{
-    console.log(req.params.id)
+    // console.log(req.params.id)
     const userEmail = jwt.verify(req.params.id,process.env.SECRET_KEY);
     try {
         await userModel.findOneAndUpdate({email:userEmail},{isEmialAuthemticated:true})
@@ -302,7 +302,7 @@ app.get('/read-item',Auth,async (req,res)=>{
         }
        }
   ]);
-  console.log(todo[0].data.length)
+//   console.log(todo[0].data.length)
   if(todo[0].data.length===0){
     return res.send({
         status:400,
@@ -310,7 +310,7 @@ app.get('/read-item',Auth,async (req,res)=>{
         data:todo[0].data
     })
   }
-  console.log(todo[0].data)
+//   console.log(todo[0].data)
   return res.send({
     status:200,
     message:"All Todos Listed",
@@ -388,7 +388,7 @@ app.post('/delete-item',Auth,async(req,res)=>{
         }
         const DeletedTodo = await todoModel.findOneAndDelete({_id:id})
         if(DeletedTodo){
-            console.log(DeletedTodo)
+            // console.log(DeletedTodo)
         }
         return res.status(200).json("Todo deleted successfully")
     }

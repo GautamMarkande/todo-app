@@ -5,15 +5,95 @@
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Simple To-Do App</title>
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+      <style>
+        body{
+          font-family: monospace;
+        }
+        .header{
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background-color:#0a0a25;
+          box-shadow: 1px 2px 4px gray;
+          
+        }
+        .headerContainer{
+          width: 80%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        .userInfo{
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        .headText{
+          color: white;
+          font-weight: 600;
+          font-size: 4rem;
+        }
+        button,.add_item{
+          border: none;
+          background-color: inherit;
+          color: white;
+          cursor: pointer;
+        }
+        .add_item{
+          border: none;
+          background-color:#0a0a25;
+          color: white;
+          cursor: pointer;
+        }
+        .add_item:hover,.delete-me:hover,.edit-me:hover{
+          background-color:#0a0a25;
+          color: rgba(193, 217, 234, 0.813);
+          transition: all 0.3s;
+          border: none;
+        }
+        button:hover{
+          color: rgba(193, 217, 234, 0.813);
+          transition: all 0.3s;
+        }
+        .input{
+          outline-color: #0a0a25;
+          outline-width: 10px;
+          border: none;
+          padding: 6px;
+        }
+        .edit-me,.delete-me,.Show_more{
+          background-color: #0a0a25;
+          color: white;
+          border: none;
+          border-radius: 4px;
+        }
+        .todoContainertop{
+          background-color:  rgba(211, 211, 211, 0.212)
+        }
+      </style>
     </head>
     <body>
+      <header class="header">
+             <div class="headerContainer">
+              <h1 class="headText">ToDo </h1>
+              <div class="userInfo">
+                <form action='/logout' method="POST">
+                  <button>Logout<button>
+                </form>
+                <form action='/logout_from_all_devices' method="POST">
+                  <button>Logout from all devices<button>
+                </form>
+              </div>
+             </div>
+      </header>
       <div class="container">
-        <h1 class="display-4 text-center py-1">To-Do App</h1>
+        <h1 class="display-4 text-center py-1">ToDo App</h1>
         
-        <div class="jumbotron p-3 shadow-sm">
+        <div class="todoContainertop jumbotron p-3 ">
           <!-- <form id="create_form" action='' method=""> -->
             <div class="d-flex align-items-center">
-              <input id="create_field" name='todo' autofocus autocomplete="off" class="form-control mr-3" type="text" style="flex: 1;">
+              <input id="create_field" name='todo' autofocus autocomplete="off" class="input" type="text" style="flex: 1;">
               <button class="add_item btn btn-primary">Add New Item</button>
             </div>
           <!-- </form> -->
@@ -23,13 +103,9 @@
         </ul>
     
        <button class="Show_more">Show more</button>
-      <form action='/logout' method="POST">
-        <button> Logout <button>
-      </form>
+      
 
-      <form action='/logout_from_all_devices' method="POST">
-        <button> Logout from all devices <button>
-      </form>
+      
 
       </div>
       <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>"
