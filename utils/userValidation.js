@@ -45,12 +45,12 @@ const sendVerificationMail=(email,varifiedToken)=>{
          pass: "mnpr ldkr aeba cncy"
       }
     })
-    //mai option
+    //mail option
     const mailOption = {
       from:'gautammarkande71@gmail.com',
       to:email,
       subject:`Please verify your Email for Todo App`,
-      html:`click <a href=http://localhost:8000/auth/${varifiedToken}>here</a>`
+      html:`click <a href=${process.env.URL}/auth/${varifiedToken}>here</a>`
 
    }
     //send mail
